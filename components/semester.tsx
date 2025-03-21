@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { type Course, type SemesterData, gradePoints } from "@/app/page"
+import { type Course, type SemesterData} from "@/app/page"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { gradePoints } from "../lib/gradePoints"
 
 interface SemesterProps {
   semester: SemesterData

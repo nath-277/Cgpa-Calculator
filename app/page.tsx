@@ -33,6 +33,7 @@ import {
   type ChartData,
 } from "chart.js"
 import { Line } from "react-chartjs-2"
+import { gradePoints } from "../lib/gradePoints"
 
 // Register ChartJS components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
@@ -52,15 +53,7 @@ export type SemesterData = {
   gpa: number
 }
 
-// Nigerian 5-point grading system
-export const gradePoints: Record<string, number> = {
-  A: 5.0,
-  B: 4.0,
-  C: 3.0,
-  D: 2.0,
-  E: 1.0,
-  F: 0.0,
-}
+// Nigerian 5-point grading system is imported from "../lib/gradePoints"
 
 // Get CGPA color based on value
 const getCgpaColor = (cgpa: number) => {
@@ -90,7 +83,7 @@ const getClassificationColorClass = (cgpa: number) => {
 }
 
 // Get grade color class
-const getGradeColorClass = (grade: string) => {
+const getGradeColorClass = (grade: string): string => {
   const point = gradePoints[grade] || 0
   if (point >= 4.5) return "bg-green-600 text-white"
   if (point >= 3.5) return "bg-green-500 text-white"
@@ -112,7 +105,6 @@ function SemiCircleProgressBar({ value, maxValue }: { value: number; maxValue: n
           rotation: 0.625,
           strokeLinecap: "round",
           textSize: "18px",
-          fontWeight: "bold",
           pathTransitionDuration: 0.5,
           pathColor: getCgpaColor(value),
           textColor: "#333",
@@ -243,14 +235,15 @@ function GpaChart({ data }: { data?: { semester: string; gpa: number; cgpa: numb
         max: 5,
         ticks: {
           stepSize: 1,
-          callback: (value: number) => {
-            if (value === 0) return "0"
-            if (value === 1) return "E"
-            if (value === 2) return "D"
-            if (value === 3) return "C"
-            if (value === 4) return "B"
-            if (value === 5) return "A"
-            return value
+          callback: (tickValue: string | number, index: number, ticks: any[]) => {
+            const value = typeof tickValue === "string" ? Number(tickValue) : tickValue;
+            if (value === 0) return "0";
+            if (value === 1) return "E";
+            if (value === 2) return "D";
+            if (value === 3) return "C";
+            if (value === 4) return "B";
+            if (value === 5) return "A";
+            return tickValue;
           },
         },
         grid: {
